@@ -1,0 +1,18 @@
+# Copyright 2021 Minikube
+# See LICENSE file for licensing details.
+name: mariadb-galera-operator
+description: |
+  MariaDB Galera Cluster provides an active/active MySQL
+  compatible alternative implemented using the Galera
+  synchronous replication library.
+summary: |
+  MariaDB Galera Cluster
+
+containers:
+  galera:
+    resource: galera-image
+
+resources:
+  galera-image:
+    type: oci-image
+    description: OCI image for MariaDB Galera
