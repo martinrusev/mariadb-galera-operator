@@ -1,1 +1,1 @@
-ops >= 1.2.0
+git+git://github.com/canonical/operator@5943a59ccde766c832d59229f3ac431587799f34#egg=ops

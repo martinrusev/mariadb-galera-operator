@@ -1,5 +1,5 @@
 deploy:
-	charmcraft build
+	charmcraft pack
 	juju deploy ./mariadb-galera.charm --resource galera-image=
 
 
