@@ -1,6 +1,6 @@
 deploy:
 	charmcraft pack
-	juju deploy ./mariadb-galera.charm --resource galera-image=
+	juju deploy ./mariadb-galera-operator_ubuntu-20.04-amd64.charm --resource galera-image=localhost:32000/mariadb-galera:latest
 
 
 remove:
