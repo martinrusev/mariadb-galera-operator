@@ -1,1 +1,11 @@
-{}
+options:
+  port:
+    description: The port MariaDB will be listening on
+    type: int
+    default: 3306
+  log_level:
+    type: string
+    description: |
+      Logging level for Grafana. Options are "debug", "info",
+      "warn", "error", and "critical".
+    default: debug
