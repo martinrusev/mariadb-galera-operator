@@ -7,6 +7,7 @@ authors = ["Martin Rusev <martin@amon.cx>"]
 [tool.poetry.dependencies]
 python = "^3.8"
 ops = {git = "https://github.com/canonical/operator.git", rev = "5943a59ccde766c832d59229f3ac431587799f34"}
+mariadb = "^1.0.7"
 
 [tool.poetry.dev-dependencies]
 

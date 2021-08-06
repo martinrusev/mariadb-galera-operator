@@ -44,7 +44,7 @@ class MariaDB:
                 logger.debug("MySQL service is ready.")
                 client.close()
                 ready = True
-        except Error as e:
+        except DatabaseError as e:
             logger.debug("MySQL is not ready yet. - %s", e)
 
         return ready
@@ -62,7 +62,7 @@ class MariaDB:
             query = "SHOW DATABASES;"
             databases = tuple(x[0] for x in self._execute_query(query))
             return databases
-        except Error as e:
+        except DatabaseError as e:
             logger.warning(e)
             return ()
 
@@ -87,7 +87,7 @@ class MariaDB:
             query = self._create_user(credentials)
             self._execute_query(query)
             return True
-        except Error as e:
+        except DatabaseError as e:
             logger.error(e)
             return False
             # Should we set BlockedStatus ?
@@ -170,11 +170,6 @@ class MariaDB:
     def _flush_privileges(self) -> str:
         """Creates the query string for flushing privileges in MySQL"""
         return "FLUSH PRIVILEGES;"
-
-    @property
-    def version(self) -> str:
-        """Get MySQL version"""
-        return MYSQL_VERSION
 
     @staticmethod
     def new_password(length: int = 16) -> str:
