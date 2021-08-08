@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import logging
-from mariadbserver import MariaDB
+
+# from mariadbserver import MariaDB
 from ops.charm import CharmBase
 from ops.framework import StoredState
 from ops.main import main
@@ -73,18 +74,18 @@ class MariaDBGaleraOperatorCharm(CharmBase):
     ##############################################
     #               PROPERTIES                   #
     ##############################################
-    @property
-    def mysql(self) -> MariaDB:
-        """Returns MariaDB object"""
-        peers_data = self.model.get_relation(PEER).data[self.app]
-        mysql_config = {
-            "app_name": self.model.app.name,
-            "host": self.unit_ip,
-            "port": MYSQL_PORT,
-            "user_name": "root",
-            "mysql_root_password": peers_data["mysql_root_password"],
-        }
-        return MariaDB(mysql_config)
+    # @property
+    # def mysql(self) -> MariaDB:
+    #     """Returns MariaDB object"""
+    #     peers_data = self.model.get_relation(PEER).data[self.app]
+    #     mysql_config = {
+    #         "app_name": self.model.app.name,
+    #         "host": self.unit_ip,
+    #         "port": MYSQL_PORT,
+    #         "user_name": "root",
+    #         "mysql_root_password": peers_data["mysql_root_password"],
+    #     }
+    #     return MariaDB(mysql_config)
 
     @property
     def unit_ip(self) -> str:
@@ -96,11 +97,11 @@ class MariaDBGaleraOperatorCharm(CharmBase):
     ##############################################
     #             UTILITY METHODS                #
     ##############################################
-    def _mysql_root_password(self) -> str:
-        """
-        Returns mysql_root_password from the config or generates one.
-        """
-        return self.config["mysql_root_password"] or MariaDB.new_password(20)
+    # def _mysql_root_password(self) -> str:
+    #     """
+    #     Returns mysql_root_password from the config or generates one.
+    #     """
+    #     return self.config["mysql_root_password"] or MariaDB.new_password(20)
 
     def _update_peers(self):
         if self.unit.is_leader():
