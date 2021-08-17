@@ -33,7 +33,7 @@ class MariaDBGaleraOperatorCharm(CharmBase):
             pebble_ready=False,
         )
         self.framework.observe(
-            self.on.mariadb_galera_pebble_ready, self._on_pebble_ready
+            self.on.mariadbgalera_pebble_ready, self._on_pebble_ready
         )
         self._provide_mysql()
         self.container = self.unit.get_container(PEER)

@@ -1,5 +1,3 @@
-# Copyright 2021 Minikube
-# See LICENSE file for licensing details.
 name: mariadb-galera-operator
 description: |
   MariaDB Galera Cluster provides an active/active MySQL
