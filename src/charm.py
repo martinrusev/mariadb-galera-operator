@@ -41,12 +41,12 @@ class MariaDBGaleraOperatorCharm(CharmBase):
     ##############################################
     def _on_pebble_ready(self, _):
         self._stored.pebble_ready = True
-        self._update_peers()
+        # self._update_peers()
         self._configure_pod()
 
     def _on_config_changed(self, _):
         """Set a new Juju pod specification"""
-        self._update_peers()
+        # self._update_peers()
         self._configure_pod()
 
     def _on_update_status(self, _):
@@ -82,12 +82,12 @@ class MariaDBGaleraOperatorCharm(CharmBase):
     ##############################################
     #             UTILITY METHODS                #
     ##############################################
-    def _update_peers(self):
-        if self.unit.is_leader():
-            peers_data = self.model.get_relation(PEER).data[self.app]
+    # def _update_peers(self):
+    #     if self.unit.is_leader():
+    #         peers_data = self.model.get_relation(PEER).data[self.app]
 
-            if not peers_data.get("mysql_root_password"):
-                peers_data["mysql_root_password"] = self._mysql_root_password()
+    #         if not peers_data.get("mysql_root_password"):
+    #             peers_data["mysql_root_password"] = self._mysql_root_password()
 
     def _configure_pod(self):
         """Configure the Pebble layer for MariaDB."""
@@ -123,18 +123,11 @@ class MariaDBGaleraOperatorCharm(CharmBase):
         def env_config() -> dict:
             """Return the env_config for pebble layer"""
             config = self.model.config
-            peers_data = self.model.get_relation(PEER).data[self.app]
-            env_config = {}
-            env_config["MYSQL_ROOT_PASSWORD"] = peers_data["mysql_root_password"]
-
-            if (user := config.get("mysql_user")) and (
-                password := config.get("mysql_password")
-            ):
-                env_config["MYSQL_USER"] = user
-                env_config["MYSQL_PASSWORD"] = password
-
-            if database := config.get("mysql_database"):
-                env_config["MYSQL_DATABASE"] = database
+            env_config = {
+                "DEBUG": "True",
+                "DB_GALERA_CLUSTER_BOOTSTRAP": "yes",
+                "ALLOW_EMPTY_PASSWORD": "yes",
+            }
 
             return env_config
 
