@@ -98,19 +98,9 @@ class MariaDBGaleraOperatorCharm(CharmBase):
             return False
 
         layer = self._build_pebble_layer()
-
-        if not layer["services"][PEER]["environment"].get("MYSQL_ROOT_PASSWORD", False):
-            msg = "Awaiting leader node to set mysql_root_password"
-            logger.debug(msg)
-            self.unit.status = MaintenanceStatus(msg)
-            return False
-
         services = self.container.get_plan().to_dict().get("services", {})
 
-        if (
-            not services
-            or services[PEER]["environment"] != layer["services"][PEER]["environment"]
-        ):
+        if not services:
             self.container.add_layer(PEER, layer, combine=True)
             self._restart_service()
             self.unit.status = ActiveStatus()
