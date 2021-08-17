@@ -32,10 +32,8 @@ class MariaDBGaleraOperatorCharm(CharmBase):
             mysql_initialized=False,
             pebble_ready=False,
         )
-        self.framework.observe(
-            self.on.mariadbgalera_pebble_ready, self._on_pebble_ready
-        )
-        self._provide_mysql()
+        self.framework.observe(self.on.galera_pebble_ready, self._on_pebble_ready)
+
         self.container = self.unit.get_container(PEER)
 
     ##############################################
@@ -74,19 +72,6 @@ class MariaDBGaleraOperatorCharm(CharmBase):
     ##############################################
     #               PROPERTIES                   #
     ##############################################
-    # @property
-    # def mysql(self) -> MariaDB:
-    #     """Returns MariaDB object"""
-    #     peers_data = self.model.get_relation(PEER).data[self.app]
-    #     mysql_config = {
-    #         "app_name": self.model.app.name,
-    #         "host": self.unit_ip,
-    #         "port": MYSQL_PORT,
-    #         "user_name": "root",
-    #         "mysql_root_password": peers_data["mysql_root_password"],
-    #     }
-    #     return MariaDB(mysql_config)
-
     @property
     def unit_ip(self) -> str:
         """Returns unit's IP"""
@@ -97,12 +82,6 @@ class MariaDBGaleraOperatorCharm(CharmBase):
     ##############################################
     #             UTILITY METHODS                #
     ##############################################
-    # def _mysql_root_password(self) -> str:
-    #     """
-    #     Returns mysql_root_password from the config or generates one.
-    #     """
-    #     return self.config["mysql_root_password"] or MariaDB.new_password(20)
-
     def _update_peers(self):
         if self.unit.is_leader():
             peers_data = self.model.get_relation(PEER).data[self.app]
@@ -174,14 +153,6 @@ class MariaDBGaleraOperatorCharm(CharmBase):
         }
 
         return layer
-
-    # def _provide_mysql(self) -> None:
-    #     if self._is_mysql_initialized():
-    #         self.mysql_provider = MariaDBProvider(
-    #             self, "database", PEER, self.mysql.version
-    #         )
-    #         self.mysql_provider.ready()
-    #         logger.debug("MariaDB Provider is available")
 
     def _restart_service(self):
         """Restarts MariaDB Service"""

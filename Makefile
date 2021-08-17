@@ -1,7 +1,7 @@
 pre_deploy:
 	sudo apt install python3-pip python3-wheel python3-setuptools -y
 
-build:
+pack:
 	charmcraft pack --destructive-mode
 
 # microk8s enable registry

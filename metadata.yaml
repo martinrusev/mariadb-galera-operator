@@ -18,4 +18,4 @@ resources:
     type: oci-image
     description: Docker image for MariaDB
     auto-fetch: true
-    upstream-source: "grafana/grafana:7.5.2"
+    upstream-source: "localhost:32000/mariadb-galera:latest"
