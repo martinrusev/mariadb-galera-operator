@@ -17,7 +17,7 @@ from ops.model import (
 
 logger = logging.getLogger(__name__)
 
-PEER = "galera"
+SERVICE = "galera"
 MYSQL_PORT = 3306
 
 
@@ -34,7 +34,7 @@ class MariaDBGaleraOperatorCharm(CharmBase):
         )
         self.framework.observe(self.on.galera_pebble_ready, self._on_pebble_ready)
 
-        self.container = self.unit.get_container(PEER)
+        self.container = self.unit.get_container(SERVICE)
 
     ##############################################
     #           CHARM HOOKS HANDLERS             #
@@ -75,7 +75,7 @@ class MariaDBGaleraOperatorCharm(CharmBase):
     @property
     def unit_ip(self) -> str:
         """Returns unit's IP"""
-        if bind_address := self.model.get_binding(PEER).network.bind_address:
+        if bind_address := self.model.get_binding(SERVICE).network.bind_address:
             return str(bind_address)
         return ""
 
@@ -84,7 +84,7 @@ class MariaDBGaleraOperatorCharm(CharmBase):
     ##############################################
     # def _update_peers(self):
     #     if self.unit.is_leader():
-    #         peers_data = self.model.get_relation(PEER).data[self.app]
+    #         peers_data = self.model.get_relation(SERVICE).data[self.app]
 
     #         if not peers_data.get("mysql_root_password"):
     #             peers_data["mysql_root_password"] = self._mysql_root_password()
@@ -101,7 +101,7 @@ class MariaDBGaleraOperatorCharm(CharmBase):
         services = self.container.get_plan().to_dict().get("services", {})
 
         if not services:
-            self.container.add_layer(PEER, layer, combine=True)
+            self.container.add_layer(SERVICE, layer, combine=True)
             self._restart_service()
             self.unit.status = ActiveStatus()
             return True
@@ -125,10 +125,9 @@ class MariaDBGaleraOperatorCharm(CharmBase):
             "summary": "MariaDB layer",
             "description": "Pebble layer configuration for MariaDB",
             "services": {
-                PEER: {
-                    "override": "replace",
+                SERVICE: {
+                    "override": "merge",
                     "summary": "mariadb service",
-                    "command": "/opt/canonical/mariadb-galera/scripts/entrypoint.sh",
                     "startup": "enabled",
                     "environment": env_config(),
                 }
@@ -140,7 +139,7 @@ class MariaDBGaleraOperatorCharm(CharmBase):
     def _restart_service(self):
         """Restarts MariaDB Service"""
         try:
-            service = self.container.get_service(PEER)
+            service = self.container.get_service(SERVICE)
         except ConnectionError:
             logger.debug("Pebble API is not yet ready")
             return False
@@ -149,9 +148,9 @@ class MariaDBGaleraOperatorCharm(CharmBase):
             return False
 
         if service.is_running():
-            self.container.stop(PEER)
+            self.container.stop(SERVICE)
 
-        self.container.start(PEER)
+        self.container.start(SERVICE)
         logger.debug("Restarted MariaDB service")
         self.unit.status = ActiveStatus()
         self._stored.mariadb_initialized = True
