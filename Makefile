@@ -4,16 +4,17 @@ pre_deploy:
 pack:
 	charmcraft pack --destructive-mode
 
-# microk8s enable registry
-deploy:
-	charmcraft pack --destructive-mode
-	juju deploy ./mariadb-galera-operator_ubuntu-20.04-amd64.charm --resource galera-image=localhost:32000/mariadb-galera:latest
-
-d:
-	juju deploy ./mariadb-galera-operator_ubuntu-20.04-amd64.charm --resource galera-image=localhost:32000/mariadb-galera:latest
-
 remove:
 	juju remove-application mariadb-galera-operator --force
+
+sleep:
+	timeout 20
+
+# microk8s enable registry
+deploy: remove sleep
+	charmcraft pack --destructive-mode
+	juju deploy ./mariadb-galera-operator_ubuntu-20.04-amd64.charm --resource galera-image=localhost:32000/mariadb-galera:$(shell docker images mariadb-galera:latest --format '{{.ID}}')
+
 
 
 juju_reset:
