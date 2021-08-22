@@ -131,7 +131,7 @@ class MariaDBGaleraOperatorCharm(CharmBase):
                     "startup": "enabled",
                     "user": "mysql",
                     "group": "mysql",
-                    "command": "/opt/canonical/mariadb-galera/scripts/entrypoint.sh",
+                    "command": "/opt/canonical/mariadb-galera/scripts/run.sh",
                     "environment": env_config(),
                 }
             },
