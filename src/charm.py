@@ -129,6 +129,8 @@ class MariaDBGaleraOperatorCharm(CharmBase):
                     "override": "merge",
                     "summary": "mariadb service",
                     "startup": "enabled",
+                    "user": "mysql",
+                    "group": "mysql",
                     "command": "/opt/canonical/mariadb-galera/scripts/run.sh",
                     "environment": env_config(),
                 }
