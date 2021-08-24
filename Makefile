@@ -7,15 +7,15 @@ pack:
 remove:
 	juju remove-application mariadb-galera-operator --force
 
-sleep:
-	timeout 20
+pause:
+	@sleep 30
 
 # microk8s enable registry
-deploy: remove sleep
+deploy:
 	charmcraft pack --destructive-mode
 	juju deploy ./mariadb-galera-operator_ubuntu-20.04-amd64.charm --resource galera-image=localhost:32000/mariadb-galera:$(shell docker images mariadb-galera:latest --format '{{.ID}}')
 
-
+deploy_clean: remove pause deploy
 
 juju_reset:
 	juju destroy-controller galera --destroy-all-models --destroy-storage
