@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 
 SERVICE = "galera"
 MYSQL_PORT = 3306
+CONFIG_PATH = "/opt/canonical/mariadb-galera/mariadb/conf/my.cnf"
 
 
 class MariaDBGaleraOperatorCharm(CharmBase):
@@ -82,12 +83,6 @@ class MariaDBGaleraOperatorCharm(CharmBase):
     ##############################################
     #             UTILITY METHODS                #
     ##############################################
-    # def _update_peers(self):
-    #     if self.unit.is_leader():
-    #         peers_data = self.model.get_relation(SERVICE).data[self.app]
-
-    #         if not peers_data.get("mysql_root_password"):
-    #             peers_data["mysql_root_password"] = self._mysql_root_password()
 
     def _configure_pod(self):
         """Configure the Pebble layer for MariaDB."""

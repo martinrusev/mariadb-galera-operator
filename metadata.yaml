@@ -10,9 +10,26 @@ platforms:
 bases:
   - name: ubuntu
     channel: 20.04/stable
+
 containers:
   galera:
     resource: galera-image
+    mounts:
+      - storage: database
+        location: /canonical/mariadb/data
+
+storage:
+  database:
+    type: filesystem
+
+peers:
+  galera-peers:
+    interface: galera_peers
+
+provides:
+  database:
+    interface: galera
+
 resources:
   galera-image:
     type: oci-image
